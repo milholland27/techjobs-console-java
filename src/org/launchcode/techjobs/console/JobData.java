@@ -3,13 +3,16 @@ package org.launchcode.techjobs.console;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+//import sun.awt.SunHints;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by LaunchCode
@@ -57,14 +60,15 @@ public class JobData {
     /**
      * Returns results of search the jobs data by key/value, using
      * inclusion of the search term.
-     *
+     * <p>
      * For example, searching for employer "Enterprise" will include results
      * with "Enterprise Holdings, Inc".
      *
-     * @param column   Column that should be searched.
-     * @param value Value of teh field to search for
+     * @param column Column that should be searched.
+     * @param value  Value of teh field to search for
      * @return List of all jobs matching the criteria
      */
+
     public static ArrayList<HashMap<String, String>> findByColumnAndValue(String column, String value) {
 
         // load data, if not already loaded
@@ -76,6 +80,9 @@ public class JobData {
 
             String aValue = row.get(column);
 
+            aValue = aValue.toLowerCase();
+            value = value.toLowerCase();
+
             if (aValue.contains(value)) {
                 jobs.add(row);
             }
@@ -84,7 +91,53 @@ public class JobData {
         return jobs;
     }
 
-    /**
+    public static ArrayList<HashMap<String, String>> findByValue(String value) {
+
+        value = value.toLowerCase();
+
+        loadData();
+
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+
+        for (HashMap<String, String> job : allJobs) {
+            for (String key : job.keySet()) {
+                if (job.get(key).toLowerCase().contains(value)){
+                jobs.add(job);
+                break;
+            }
+        }
+
+    }
+        return jobs;
+}
+
+           // if(!values.contains(aValue)) {
+             //   values.add(aValue);
+
+            //get keys from column to make string...
+            //for (Map.Entry<String, String> row : row.entrySet()) {
+//
+  //              String a = row.getValue();
+//
+  //                  a = a.toLowerCase();
+//
+  //              if (a.String(value)) {
+    //                jobs.add(row);
+         //       }
+           // }
+        //return jobs;
+        //}
+
+                /*else {
+                    System.out.println("No results match your search.");
+
+                    /*if(userCityMapping.containsKey(userName)) {
+                        // Get the value assigned to a given key in the HashMap
+                        String city = userCityMapping.get(userName);
+                        System.out.println(userName + " lives in " + city);
+                    } else {
+                        System.out.println("City details not found for user " + userName);
+
      * Read in data from a CSV file and store it in a list
      */
     private static void loadData() {
